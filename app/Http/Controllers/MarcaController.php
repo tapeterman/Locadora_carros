@@ -7,79 +7,76 @@ use Illuminate\Http\Request;
 
 class MarcaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
+    public function __construct(Marca $marca)
+    {
+        $this->marca = $marca;
+    }
+
     public function index()
     {
-        //
+        $marcas = $this->marca->all();
+        return $marcas;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate($this->marca->getRules(),$this->marca->getFeedback());
+        $marca = $this->marca->create($request->all());
+        return response()->json($marca,201);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Marca  $marca
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Marca $marca)
+    public function show($id)
     {
-        //
+        $marca = $this->marca->find($id);
+        
+        if($marca === null){
+            return response()->json(['erro' => 'O recurso não existe!'],404);
+        }
+
+        return response()->json($marca,200);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Marca  $marca
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Marca $marca)
+    public function update(Request $request, $id)
     {
-        //
+        
+        $marca = $this->marca->find($id);
+
+        if($marca === null){
+            return response()->json(['erro' => 'Não foi possivel atualizar os dados o recurso não existe!'],404);
+        }
+
+        if($request->method() === 'PATCH'){
+            $dynamicRules = array();
+
+            foreach ($marca->getRules() as $input => $rule) {
+
+                if(array_key_exists($input,$request->all())){
+                    $dynamicRules[$input] = $rule;
+                }
+            }
+
+            $request->validate($dynamicRules,$this->marca->getFeedback());
+
+        } else{
+
+            $request->validate($this->marca->getRules(),$this->marca->getFeedback());
+
+        }
+        
+
+        $marca->update($request->all());
+        return response()->json($marca,200);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Marca  $marca
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Marca $marca)
+    public function destroy($id)
     {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Marca  $marca
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Marca $marca)
-    {
-        //
+        $marca = $this->marca->find($id);
+        if($marca === null){
+            return response()->json(['erro' => 'não foi possivel apagar o registro!'],404);
+        }
+        $marca->delete();
+        return response()->json(['msg' => 'Marca removida com sucesso!'],200);
     }
 }
