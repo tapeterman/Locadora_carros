@@ -14,8 +14,7 @@ class ModeloController extends Controller
     }
     public function index()
     {
-        $modelo = $this->modelo->all();
-        return $modelo;
+        return response()->json($this->modelo->all(),200);
     }
 
     public function store(Request $request)
@@ -23,7 +22,7 @@ class ModeloController extends Controller
         $request->validate($this->modelo->getRules(),$this->modelo->getFeedback());
 
         $image = $request->file('imagem');
-        $imagem_urn = $image->store('imagens','public');
+        $imagem_urn = $image->store('imagens/modelos','public');
         $modelo = $this->modelo->create([
                                         'marca_id'      => $request->marca_id,
                                         'nome'          => $request->nome,
@@ -80,7 +79,7 @@ class ModeloController extends Controller
         }
         
         $image = $request->file('imagem');
-        $imagem_urn = $image->store('imagens','public');
+        $imagem_urn = $image->store('imagens/modelos','public');
 
         $marca->update([
                         'marca_id'      => $request->marca_id,
@@ -106,6 +105,6 @@ class ModeloController extends Controller
         Storage::disk('public')->delete($modelo->imagem);
         
         $modelo->delete();
-        return response()->json(['msg' => 'Marca removida com sucesso!'],200);
+        return response()->json(['msg' => 'O Modelo removido com sucesso!'],200);
     }
 }

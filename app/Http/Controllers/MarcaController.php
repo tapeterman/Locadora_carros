@@ -16,8 +16,7 @@ class MarcaController extends Controller
 
     public function index()
     {
-        $marcas = $this->marca->all();
-        return $marcas;
+        return response()->json($this->marca->all(),200);
     }
 
     public function store(Request $request)
@@ -97,7 +96,7 @@ class MarcaController extends Controller
         }
 
         Storage::disk('public')->delete($marca->imagem);
-        
+
         $marca->delete();
         return response()->json(['msg' => 'Marca removida com sucesso!'],200);
     }
