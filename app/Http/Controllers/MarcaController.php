@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Marca;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MarcaController extends Controller
 {
@@ -70,9 +71,20 @@ class MarcaController extends Controller
             $request->validate($this->marca->getRules(),$this->marca->getFeedback());
 
         }
-        
 
-        $marca->update($request->all());
+        //remove arquivo antigo se tiver atualização!
+        if($request->file('imagem')){
+            Storage::disk('public')->delete($marca->imagem);
+        }
+        
+        $image = $request->file('imagem');
+        $imagem_urn = $image->store('imagens','public');
+
+        $marca->update([
+            'nome' => $request->nome,
+            'imagem' => $imagem_urn,
+
+        ]);
         return response()->json($marca,200);
     }
 
@@ -83,6 +95,9 @@ class MarcaController extends Controller
         if($marca === null){
             return response()->json(['erro' => 'não foi possivel apagar o registro!'],404);
         }
+
+        Storage::disk('public')->delete($marca->imagem);
+        
         $marca->delete();
         return response()->json(['msg' => 'Marca removida com sucesso!'],200);
     }
