@@ -36,4 +36,11 @@ class Modelo extends Model
         ];
 
     }
+
+    public function marca(){
+
+        return $this->belongsTo('App\Models\Marca');
+        
+    }
+    
 }
