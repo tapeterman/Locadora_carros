@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Modelo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ModeloController extends Controller
 {
@@ -81,7 +82,7 @@ class ModeloController extends Controller
         $image = $request->file('imagem');
         $imagem_urn = $image->store('imagens/modelos','public');
 
-        $marca->update([
+        $modelo->update([
                         'marca_id'      => $request->marca_id,
                         'nome'          => $request->nome,
                         'imagem'        => $imagem_urn,

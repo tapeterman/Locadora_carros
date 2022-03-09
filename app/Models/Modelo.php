@@ -17,8 +17,8 @@ class Modelo extends Model
             'marca_id'          => 'exists:marcas,id',
             'nome'              => 'required|unique:modelos,nome,'.$this->id.'|min:3',
             'imagem'            => 'required|file|mimes:png,jpeg,jpg',
-            'numero_portas'     => 'required|integer|digits_beetween:1,5',
-            'lugares'           => 'required|integer|digits_beetween:1,20',
+            'numero_portas'     => 'required|integer|digits_between:1,5',
+            'lugares'           => 'required|integer|digits_between:1,20',
             'air_bag'           => 'required|boolean',
             'abs'               => 'required|boolean'
         ];
