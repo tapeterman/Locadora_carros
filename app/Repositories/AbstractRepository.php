@@ -5,7 +5,7 @@ namespace App\Repositories;
 use Illuminate\Database\Eloquent\Model;
 
 
-abstract class MarcaRepository{
+abstract class AbstractRepository{
 
     public function __construct(Model $model){
 

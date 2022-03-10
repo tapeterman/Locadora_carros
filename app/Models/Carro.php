@@ -19,7 +19,7 @@ class Carro extends Model
         
         return [
             'modelo_id'         => 'exists:modelos,id',
-            'placa'             => 'required|unique:carros,placa,'.$this->id.'|min:7|max:7',
+            'placa'             => 'required|unique:carros,placa,'.$this->id.'|min:8|max:8',
             'disponivel'        => 'required|boolean',
             'km'                => 'required|integer',
     
