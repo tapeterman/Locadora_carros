@@ -13,9 +13,41 @@ class ModeloController extends Controller
     {
         $this->modelo = $modelo;
     }
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json($this->modelo->with('marca')->get(),200);
+        $modelos = array();
+
+        if($request->has('atributos_marca')){
+
+            $atributos_marca = 'id,'.$request->atributos_marca;
+            $modelos = $this->modelo->with('marca:'.$atributos_marca);
+
+        } else {
+
+            $modelos = $this->modelo->with('marca');
+
+        }
+
+        if($request->has('filtro')){
+            $filter = explode(';',$request->filtro);
+            foreach($filter as $key => $condition){
+                $c = explode(':',$condition);
+                $modelos = $modelos->where($c[0],$c[1],$c[2]);
+            }
+        }
+
+        if($request->has('atributos')){
+
+            $atributos = 'marca_id,'.$request->atributos;
+            $modelos = $modelos->selectRaw($atributos)->get();
+
+        } else {
+            $modelos = $modelos->get();
+        }
+
+        
+
+        return response()->json($modelos,200);
     }
 
     public function store(Request $request)
