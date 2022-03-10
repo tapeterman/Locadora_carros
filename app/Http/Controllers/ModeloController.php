@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Modelo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Repositories\ModeloRepository;
 
 class ModeloController extends Controller
 {
@@ -15,39 +16,24 @@ class ModeloController extends Controller
     }
     public function index(Request $request)
     {
-        $modelos = array();
 
-        if($request->has('atributos_marca')){
-
-            $atributos_marca = 'id,'.$request->atributos_marca;
-            $modelos = $this->modelo->with('marca:'.$atributos_marca);
-
-        } else {
-
-            $modelos = $this->modelo->with('marca');
-
-        }
+        $marcaRepository = new ModeloRepository($this->marca);
+        $atributos_marca = 'marca'. ($request->has('atributos_modelos') ? ':id,'.$request->atributos_marca :  '');
+        $marcaRepository->selectAtributosRegistrosRelacionados($atributos_marca);
 
         if($request->has('filtro')){
-            $filter = explode(';',$request->filtro);
-            foreach($filter as $key => $condition){
-                $c = explode(':',$condition);
-                $modelos = $modelos->where($c[0],$c[1],$c[2]);
-            }
+
+            $marcaRepository->filtro($request->filtro);
+
         }
 
         if($request->has('atributos')){
 
-            $atributos = 'marca_id,'.$request->atributos;
-            $modelos = $modelos->selectRaw($atributos)->get();
+            $marcaRepository->selectAtributos('marca_id,'.$request->atributos);
 
-        } else {
-            $modelos = $modelos->get();
         }
 
-        
-
-        return response()->json($modelos,200);
+        return response()->json($marcaRepository->getResultado(),200);
     }
 
     public function store(Request $request)
