@@ -44,7 +44,7 @@ class Locacao extends Model
             'date'                  => 'Selecione uma data Valida!',
             'nome.min'              => 'O :attribute deve possuir pelo menos 3 caracteres!',
             'integer'               => 'O campo :attribute deve conter somente numeros!',
-            'float'                 => 'O campo :attribute deve ser 0.01 ou maior!' 
+            'numeric'               => 'O campo :attribute deve ser 0.01 ou maior!' 
         ];
 
     }
