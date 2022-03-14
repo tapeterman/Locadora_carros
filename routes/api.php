@@ -14,12 +14,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::prefix('v1')->middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('cliente'   ,  'ClienteController' );
-Route::apiResource('carro'     ,  'CarroController'   );
-Route::apiResource('locacao'   ,  'LocacaoController' );
-Route::apiResource('marca'     ,  'MarcaController'   );
-Route::apiResource('modelo'    ,  'ModeloController'  );
+Route::prefix('v1')->middleware('jwt.auth')->group(function (){
+
+    Route::post('me',       'AuthController@me');
+    Route::post('refresh',  'AuthController@refresh');
+    Route::post('logout',   'AuthController@logout');
+
+    Route::apiResource('cliente'   ,  'ClienteController' );
+    Route::apiResource('carro'     ,  'CarroController'   );
+    Route::apiResource('locacao'   ,  'LocacaoController' );
+    Route::apiResource('marca'     ,  'MarcaController'   );
+    Route::apiResource('modelo'    ,  'ModeloController'  );
+    
+});
+
+Route::post('login',    'AuthController@login');
+
+
+
