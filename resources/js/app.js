@@ -23,7 +23,9 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 //componentes genericos
 Vue.component('input-container-component', require('./components/InputContainer.vue').default);
 Vue.component('table-component', require('./components/Table.vue').default);
-
+Vue.component('card-component', require('./components/Card.vue').default);
+Vue.component('modal-component', require('./components/Modal.vue').default);
+Vue.component('alert-component', require('./components/Alert.vue').default);
 //componentes especificos
 
 Vue.component('login-component', require('./components/Login.vue').default);

@@ -12,5 +12,6 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
+    .js('node_modules/bootstrap/dist/js/bootstrap.esm.js','public/js').sourceMaps()
     .vue()
     .sass('resources/sass/app.scss', 'public/css');
