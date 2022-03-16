@@ -112,13 +112,16 @@
                 axios.post(this.urlBase,formData,config)
                     .then(response => {
                         this.status = 'ok'
-                        this.message = response
-                        console.log(response)
+                        this.message = {text :'Id do registro : ' + response.data.id }
+                        
                     })
                     .catch(errors => {
                         this.status = 'fail'
-                        this.message = errors.response
-                        console.log(errors.response.data.message)
+                        this.message = {
+                            text: errors.response.data.message,
+                            error: errors.response.data.errors
+                            
+                            }
                     })
             }
         }
